@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import data from './Pdata'
-import { NavLink } from 'react-router-dom'
+import { NavLink, Link } from 'react-router-dom'
 import { AiOutlineSearch } from "react-icons/ai";
 import Web3 from 'web3'
 import nft from '../abi/nft.json'
@@ -8,6 +8,8 @@ import Button from 'react-bootstrap/Button'
 import Modal from 'react-bootstrap/Modal'
 import { MdCancel } from "react-icons/md";
 import fromExponential from 'from-exponential';
+import Spinner from 'react-bootstrap/Spinner'
+import {addrs} from './address'
 function Explore2() {
     const [active, setactive] = useState('auction')
     const [list, setlist] = useState([])
@@ -36,8 +38,9 @@ function Explore2() {
     const [allp, setallp] = useState([])
     const [allhighp, setallhighp] = useState([])
     const [timew, settimew] = useState([])
-    const [ p1,setp1] = useState()
-    const [ p2,setp2] = useState()
+    const [p1, setp1] = useState()
+    const [p2, setp2] = useState()
+    const [tokenid, settokenid] = useState()
 
 
 
@@ -52,19 +55,21 @@ function Explore2() {
     const salenft = async (id) => {
         console.log('2')
         if (window.ethereum) {
+
             const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+
 
             let userwalletaddresss = accounts[0];
             window.web3 = new Web3(window.ethereum);
-            let swaping = new window.web3.eth.Contract(nft, '0xBDE025C87B0851c50290531aa0F9D4800bb1e18A')
+            let swaping = new window.web3.eth.Contract(nft, addrs)
 
             swaping.methods.listofsalenft(id).call({ from: userwalletaddresss })
                 .then((length) => {
-                    console.log('listlist', length);
+                    // console.log('listlist', length);
                     setlist(length[1])
                     // setlist2(length[1])
                     var listlen = length[1]?.length
-                    console.log('bnmm', listlen)
+                    // console.log('bnmm', listlen)
                     for (let i = 0; i < listlen; i++) {
                         // console.log('akk',length[0][i])
                         const ll = length[1][i]
@@ -79,17 +84,17 @@ function Explore2() {
     }
 
     const nftinfo = async (id) => {
-        console.log('4')
+        // console.log('4')
         if (window.ethereum) {
             const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
             //  console.log(accounts);
             let userwalletaddresss = accounts[0];
             window.web3 = new Web3(window.ethereum);
-            let swaping = new window.web3.eth.Contract(nft, '0xBDE025C87B0851c50290531aa0F9D4800bb1e18A')
+            let swaping = new window.web3.eth.Contract(nft, addrs)
 
             swaping.methods.nftinformation(id).call({ from: userwalletaddresss })
                 .then((fees) => {
-                    console.log('aafg', fees);
+                    // console.log('aafg', fees);
                     // localStorage.setItem(`buylistauc${id}`, JSON.stringify(fees))
                     setArr(id)
                     savelist(fees)
@@ -107,27 +112,27 @@ function Explore2() {
 
 
     }
-    console.log('lok', allfixed)
+    console.log('lok', exprice)
 
     const salenftprie = async (id) => {
-        console.log('poij', id)
+        // console.log('poij', id)
         if (window.ethereum) {
             const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
             //  console.log(accounts);
             let userwalletaddresss = accounts[0];
             window.web3 = new Web3(window.ethereum);
-            let swaping = new window.web3.eth.Contract(nft, '0xBDE025C87B0851c50290531aa0F9D4800bb1e18A')
+            let swaping = new window.web3.eth.Contract(nft, addrs)
 
             swaping.methods.listofsalenft(id).call({ from: userwalletaddresss })
                 .then((length) => {
-                    console.log('aaaprice', length);
+                    // console.log('aaaprice', length);
                     const val = {
                         id: id, value: length[2]
                     }
                     // setlist(length[1])
                     // console.log('asas',val)
                     // setlist2(length[1])
-                    localStorage.setItem(`auctionsale${id}`, (length[2]))
+                    // localStorage.setItem(`auctionsale${id}`, (length[2]))
                     setpricearr(id)
                     getallprice(val)
                     timer(id)
@@ -177,19 +182,19 @@ function Explore2() {
             //  console.log(accounts);
             let userwalletaddresss = accounts[0];
             window.web3 = new Web3(window.ethereum);
-            let swaping = new window.web3.eth.Contract(nft, '0xBDE025C87B0851c50290531aa0F9D4800bb1e18A')
+            let swaping = new window.web3.eth.Contract(nft, addrs)
 
 
             swaping.methods.timing(id).call({ from: userwalletaddresss })
                 .then((fees) => {
-                    
+
                     var day = Math.floor(fees / 86400)
-                    var hr = Math.floor((fees - day * 86400)/3600)
-                    var minutesout = Math.floor((fees - day * 86400 - hr * 3600)/60);
-                    console.log("hr",hr)
-                    console.log("day",day)
-                    console.log("min",minutesout)
-                    settime({d:day,h:hr,m:minutesout})
+                    var hr = Math.floor((fees - day * 86400) / 3600)
+                    var minutesout = Math.floor((fees - day * 86400 - hr * 3600) / 60);
+                    // console.log("hr",hr)
+                    // console.log("day",day)
+                    // console.log("min",minutesout)
+                    settime({ id: id, d: day, h: hr, m: minutesout })
 
 
                 }).catch()
@@ -209,16 +214,17 @@ function Explore2() {
             //  console.log(accounts);
             let userwalletaddresss = accounts[0];
             window.web3 = new Web3(window.ethereum);
-            let swaping = new window.web3.eth.Contract(nft, '0xBDE025C87B0851c50290531aa0F9D4800bb1e18A')
+            let swaping = new window.web3.eth.Contract(nft, addrs)
 
             swaping.methods.auctiondetail(id).call({ from: userwalletaddresss })
                 .then((value) => {
-                    console.log('assasacvbv',value);     
+                    // console.log('assasacvbv',value);     
                     // localStorage.setItem(`highauc${id}`, value[0])
                     // localStorage.setItem(`highaucid${id}`, value[1])
                     var aucde = {
-                        id:value[1],
-                        val:value[0]
+                        id: value[1],
+                        val: value[0],
+                        userid: id
                     }
                     getallhighprice(aucde)
                 }).catch()
@@ -243,38 +249,49 @@ function Explore2() {
         if (window.ethereum) {
             const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
             //  console.log(accounts);
+            settokenid(accounts)
+
             let userwalletaddresss = accounts[0];
             window.web3 = new Web3(window.ethereum);
-            let swaping = new window.web3.eth.Contract(nft, '0xBDE025C87B0851c50290531aa0F9D4800bb1e18A')
+            let swaping = new window.web3.eth.Contract(nft, addrs)
             let amountIn = window.web3.utils.toBN(fromExponential((amount) * Math.pow(10, 18)));
             swaping.methods.buyauction(tokenid).send({ from: userwalletaddresss, value: amountIn })
                 .then((recipt) => {
-                    console.log(recipt);
+                    // console.log(recipt);
                     setShow(false)
                     window.location.reload(true)
                 })
-                .catch()
+                .catch((err) => {
+                    setShow(false)
+                    settokenid('')
+                })
         }
     }
     const claimauctionnft = async (collectionid, tokenid) => {
         if (window.ethereum) {
             const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
             //  console.log(accounts);
+
+            settokenid(accounts)
+            setShow(true)
             let userwalletaddresss = accounts[0];
             window.web3 = new Web3(window.ethereum);
-            let swaping = new window.web3.eth.Contract(nft, '0xBDE025C87B0851c50290531aa0F9D4800bb1e18A')
+            let swaping = new window.web3.eth.Contract(nft, addrs)
             // let amountIn = window.web3.utils.toBN(fromExponential((amount) * Math.pow(10,18)));
             swaping.methods.claim(collectionid, tokenid).send({ from: userwalletaddresss })
                 .then((recipt) => {
-                    console.log(recipt);
+                    // console.log(recipt);
                     window.location.reload(true)
                 })
-                .catch()
+                .catch((err) => {
+                    setShow(false)
+                    settokenid('')
+                })
         }
     }
-    
+
     return (
-        <div className="explore">
+        <div className="explore exploremain">
             <div className="container px-5">
 
                 <div className="filbtn">
@@ -295,7 +312,15 @@ function Explore2() {
 
                 <div className="row py-5">
                     {
-                       allfixed? allfixed.map((val, id) => {
+                        allfixed.length ? null :
+                            <div style={{ display: 'flex', justifyContent: "center" }}>
+                                {/* <Spinner animation="border" variant="light" /> */}
+
+                            </div>
+
+                    }
+                    {
+                        allfixed ? allfixed.map((val, id) => {
                             return <div className="col-md-3 col-12 my-2">
                                 <div className="excard px-2">
 
@@ -306,28 +331,101 @@ function Explore2() {
                                     <div className="excarddetail">
                                         <p>{val ? val[1] : null}</p>
                                         <p></p>
-                                        {
-                                            Number(allhighp[id]?.val) > Number(allp[id]?.value) ?
-                                            <>
-                                                <p>{Number(allhighp?allhighp[id]?.val:null)/ 1000000000000000000} ETH</p>
-                                                <p style={{ fontSize: '10px' }}>{allhighp[id]?.id}</p>
-                                                </> : <>
-                                                    <p>{Number(allp[id]?.value) / 1000000000000000000} ETH</p>
-                                                    
 
-                                                </>
-                                        }
                                         {
-                                            <p style={{color:'orange',fontSize:'12px'}}>{`${timew[id]?.d} Days ${timew[id]?.h} Hr ${timew[id]?.m} Min`}</p>
+
+
+                                            allhighp.map((u) => {
+
+                                                if (u.userid === val[0]) {
+                                                    return allp.map((vala) => {
+                                                        if (vala.id === val[0]) {
+                                                            return <>
+                                                                {
+                                                                    Number(u?.val) > Number(vala?.value) ? <> <p>{Number(u?.val) / 1000000000000000000} BNB </p><p style={{ fontSize: '10px' }}>{u?.id}</p></> :
+                                                                        <p>{Number(Number(vala?.value?.length > 21 ? vala?.value / 1000000000000000000000000000000000000 : vala?.value / 1000000000000000000))}BNB  </p>
+                                                                }
+                                                                {/* <p>{Number(u?.val) / 1000000000000000000} BNB = $ {(Number(u?.val) / 1000000000000000000) * 487} BNB </p> */}
+                                                            </>
+
+                                                        }
+                                                    })
+
+
+
+
+                                                }
+                                            })
+
                                         }
 
-                                       
+
+
+
+                                        {/* {
+                                            Number(allhighp[id]?.val) > Number(allp[id]?.value) ? <> <p>{Number(allhighp[id]?.val) / 1000000000000000000} BNB = $ {(Number(allhighp[id]?.val) / 1000000000000000000) * 487} BNB </p><p style={{ fontSize: '10px' }}>{allhighp[id]?.id}</p></> : <p>{Number(Number(allp[id]?.value?.length > 21 ? allp[id]?.value / 1000000000000000000000000000000000000 : allp[id]?.value / 1000000000000000000))}BNB =$ {(Number(Number(allp[id]?.value?.length > 21 ? allp[id]?.value / 1000000000000000000000000000000000000 : allp[id]?.value / 1000000000000000000)) * 487)} </p>
+                                        } */}
+                                        {
+                                            timew.map((t) => {
+                                                if (t.id === val[0]) {
+                                                    return <p style={{ color: 'orange', fontSize: '12px' }}>{`${t?.d} Days ${t?.h} Hr ${t?.m} Min`}</p>
+                                                }
+                                            })
+
+                                        }
+
+
 
                                     </div>
                                     <div className="excardbtn">
-                                        <button className="one">Detail</button>
+                                        <Link to={{
+                                            pathname: `/assetdetail/auction`,
+                                            state: val
+                                        }} style={{ fontSize: '15px' }}><button className="one">Detail</button></Link>
                                         {
-                                            ((timew[id]?.d)===0 && (timew[id]?.d)===0) && (timew[id]?.d)===0 ?
+                                            timew.map((t) => {
+                                                if (t.id === val[0]) {
+                                                    return <>   {
+                                                        ((t?.d) === 0 && (t?.h) === 0) && (t?.m) === 0 ?
+                                                            <button className="two" onClick={() => claimauctionnft(val ? val[7] : null, val ? val[0] : null)}>Claim</button> : <button className="two" onClick={() => {
+                                                                setmodaldatao(val ? val[3] : null)
+                                                                setmodaldatac(val ? val[4] : null)
+                                                                setmodaldatai(val ? val[6] : null)
+                                                                setmodaldataaa(val ? val[1] : null)
+                                                                // setmodaldatap(Number(localStorage.getItem(`auctonsale${newlist[id]}`)) / 1000000000000000000)
+                                                                setmodaldatacol(val ? val[7] : null)
+                                                                setmodaldatatok(val ? val[0] : null)
+                                                                
+
+
+                                                                
+                                                                allhighp.map((u) => {
+                                                                    if (u.userid === val[0]) {
+                                                                        return allp.map((vala) =>{
+                                                                            if (vala.id === val[0]) {
+                                                                                return setexprice( Number(u?.val) > Number(vala?.value) ? Number(u?.val) / 1000000000000000000 : Number(Number(vala?.value?.length > 21 ? vala?.value / 1000000000000000000000000000000000000 : vala?.value / 1000000000000000000)))
+                                                                            }
+                                                                        
+                                                                        })
+                                                                    }
+                                                                })
+                                                                
+
+                                                                // setexprice(Number(allhighp[id]?.val) > Number(allp[id]?.value) ? Number(allhighp[id]?.val) / 1000000000000000000 : Number(Number(allp[id]?.value?.length > 21 ? allp[id]?.value / 1000000000000000000000000000000000000 : allp[id]?.value / 1000000000000000000)))
+                                                                // setp1(Number(allhighp[id]?.val))
+                                                                // setp2(Number(allp[id]?.value))
+                                                                setShow(true)
+
+                                                            }}>Bid</button>
+                                                    }
+                                                    </>
+                                                }
+
+                                            })
+
+                                        }
+                                        {/* {
+                                            ((timew[id]?.d) === 0 && (timew[id]?.h) === 0) && (timew[id]?.m) === 0 ?
                                                 <button className="two" onClick={() => claimauctionnft(val ? val[7] : null, val ? val[0] : null)}>Claim</button> : <button className="two" onClick={() => {
                                                     setmodaldatao(val ? val[3] : null)
                                                     setmodaldatac(val ? val[4] : null)
@@ -336,13 +434,13 @@ function Explore2() {
                                                     // setmodaldatap(Number(localStorage.getItem(`auctonsale${newlist[id]}`)) / 1000000000000000000)
                                                     setmodaldatacol(val ? val[7] : null)
                                                     setmodaldatatok(val ? val[0] : null)
-                                                    setexprice(Number(allhighp[id]?.val)>Number(allp[id]?.value) ? Number(allhighp[id]?.val)/ 1000000000000000000 :Number(allp[id]?.value)/ 1000000000000000000)
+                                                    setexprice(Number(allhighp[id]?.val) > Number(allp[id]?.value) ? Number(allhighp[id]?.val) / 1000000000000000000 : Number(Number(allp[id]?.value?.length > 21 ? allp[id]?.value / 1000000000000000000000000000000000000 : allp[id]?.value / 1000000000000000000)))
                                                     // setp1(Number(allhighp[id]?.val))
                                                     // setp2(Number(allp[id]?.value))
                                                     setShow(true)
 
                                                 }}>Bid</button>
-                                        }
+                                        } */}
 
                                     </div>
                                 </div>
@@ -361,56 +459,71 @@ function Explore2() {
                                         buyauctionnft(modaldatatok, payvalue)
 
                                     }}>
-                                        <Modal.Header >
-                                            <h3><span>Mint Asset Summary</span> <MdCancel onClick={handleClose} /></h3>
-                                            <div className="assetowner">
-                                                <h4>Asset Owner:</h4>
-                                                <h5>{modaldatao}</h5>
-                                                {/* <h3>{p1}</h3>
+                                        {
+                                            tokenid ? null :
+
+                                                <Modal.Header >
+                                                    <h3><span>Mint Asset Summary</span> <MdCancel onClick={handleClose} /></h3>
+                                                    <div className="assetowner">
+                                                        <h4>Asset Owner:</h4>
+                                                        <h5>{modaldatao}</h5>
+                                                        {/* <h3>{p1}</h3>
                                                 <h3>{p2}</h3> */}
-                                            </div>
-                                            <div className="assetowner">
-                                                <h4>Copies:</h4>
-                                                <h5>{modaldatac}</h5>
-                                            </div>
-                                        </Modal.Header>
+
+                                                    </div>
+                                                    <div className="assetowner">
+                                                        <h4>Copies:</h4>
+                                                        <h5>{modaldatac}</h5>
+                                                    </div>
+                                                </Modal.Header>
+                                        }
                                         <Modal.Body>
+                                            {
+                                                tokenid ? <div style={{ display: 'flex' }}><h3 className="mx-5">loading...</h3><Spinner animation="grow" variant="light" /></div> : <div className="row">
+                                                    <div className="col-6">
+                                                        <div className="savenftcard">
+                                                            <div className="savemnftcard">
+                                                                <div className="img">
+                                                                    <img src={`https://ipfs.infura.io/ipfs/${modaldatai}`} className="img-fuild" alt="ll" />
+                                                                </div>
+                                                                <div className="carddetails">
+                                                                    <p>{modaldataaa}</p>
+                                                                    {/* <h3>{assetname}</h3> */}
+                                                                    {/* <h4>{ownername}</h4> */}
 
-                                            <div className="row">
-                                                <div className="col-6">
-                                                    <div className="savenftcard">
-                                                        <div className="savemnftcard">
-                                                            <div className="img">
-                                                                <img src={`https://ipfs.infura.io/ipfs/${modaldatai}`} className="img-fuild" alt="ll" />
-                                                            </div>
-                                                            <div className="carddetails">
-                                                                <p>{modaldataaa}</p>
-                                                                {/* <h3>{assetname}</h3> */}
-                                                                {/* <h4>{ownername}</h4> */}
-
+                                                                </div>
                                                             </div>
                                                         </div>
-                                                    </div>
-                                                    {/* <img src={displayimage} className="img-fluid" /> */}
+                                                        {/* <img src={displayimage} className="img-fluid" /> */}
 
-                                                </div>
-                                                <div className="col-6 attricard">
-                                                    <div className="attributes">
-                                                        <input type="Number" placeholder={`enter amount minval- ${exprice} ETH`} min={(exprice)} onChange={(e) => setpayvalue(e.target.value)} required />
                                                     </div>
+                                                    {
+                                                        tokenid ? null :
 
+                                                            <div className="col-6 attricard">
+                                                                <div className="attributes">
+                                                                    <input type="Number" placeholder={`enter amount minval- ${exprice} ETH`} min={(exprice)} step="any" onChange={(e) => setpayvalue(e.target.value)} required />
+                                                                </div>
+
+                                                            </div>
+                                                    }
                                                 </div>
-                                            </div>
+                                            }
+
 
                                         </Modal.Body>
-                                        <Modal.Footer>
+                                        {
+                                            tokenid ? null :
 
-                                            <Button type='submit' variant="primary" >Confirm</Button>
-                                        </Modal.Footer>
+                                                <Modal.Footer>
+
+                                                    <Button type='submit' variant="primary" >Confirm</Button>
+                                                </Modal.Footer>
+                                        }
                                     </form>
                                 </Modal>
                             </div>
-                        }):<p>loading....</p>
+                        }) : <p>loading....</p>
                     }
 
 

@@ -1,5 +1,6 @@
 import React from 'react'
 import img1 from '../img/img1.png'
+import {addrs} from './address'
 
 function Home() {
     return (

@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react'
-import { coldata } from './Pdata'
+import { coldata,data1,data2 } from './Pdata'
 import { Link, useParams } from 'react-router-dom'
 import Web3 from 'web3'
 import nft from '../abi/nft.json'
 import { AiOutlineSearch } from "react-icons/ai";
+import {addrs} from './address'
 function Searchpage({ sdata }) {
 
     // const [active, setactive] = useState('sales')
@@ -21,10 +22,15 @@ function Searchpage({ sdata }) {
     const [assetist, setassetlist] = useState()
     const [allcolllist, allsetcolllist] = useState([])
     const [allmaindata,setallmaindata] = useState()
+    const [subdata,setsubdata] = useState([])
+    const [subdata2,setsubdata2] = useState([])    
+    const [subdata3,setsubdata3] = useState([])
+    const [accountid,setaccountid] = useState()
     
-    
-    useEffect(() => {
+    useEffect(async() => {
         totalcolection()
+        const accounts1 = await window.ethereum.request({ method: 'eth_requestAccounts' });
+        setaccountid(accounts1)
 
     }, [])
     const totalcolection = async () => {
@@ -36,7 +42,7 @@ function Searchpage({ sdata }) {
             //  console.log(accounts);
             let userwalletaddresss = accounts[0];
             window.web3 = new Web3(window.ethereum);
-            let swaping = new window.web3.eth.Contract(nft, '0xBDE025C87B0851c50290531aa0F9D4800bb1e18A')
+            let swaping = new window.web3.eth.Contract(nft, addrs)
 
             swaping.methods.collectionform().call({ from: userwalletaddresss })
                 .then((length) => {
@@ -59,7 +65,7 @@ function Searchpage({ sdata }) {
             //  console.log(accounts);
             let userwalletaddresss = accounts[0];
             window.web3 = new Web3(window.ethereum);
-            let swaping = new window.web3.eth.Contract(nft, '0xBDE025C87B0851c50290531aa0F9D4800bb1e18A')
+            let swaping = new window.web3.eth.Contract(nft, addrs)
 
             swaping.methods.collectiondetails(id).call({ from: userwalletaddresss })
                 .then((fees) => {
@@ -91,7 +97,7 @@ function Searchpage({ sdata }) {
              //  console.log(accounts);
              let userwalletaddresss = accounts[0];
              window.web3 = new Web3(window.ethereum);
-             let swaping = new window.web3.eth.Contract(nft, '0xBDE025C87B0851c50290531aa0F9D4800bb1e18A')
+             let swaping = new window.web3.eth.Contract(nft, addrs)
  
              swaping.methods.tokenidmint().call({ from: userwalletaddresss })
                  .then((length) => {
@@ -119,7 +125,7 @@ function Searchpage({ sdata }) {
              //  console.log(accounts);
              let userwalletaddresss = accounts[0];
              window.web3 = new Web3(window.ethereum);
-             let swaping = new window.web3.eth.Contract(nft, '0xBDE025C87B0851c50290531aa0F9D4800bb1e18A')
+             let swaping = new window.web3.eth.Contract(nft, addrs)
  
              swaping.methods.nftinformation(id).call({ from: userwalletaddresss })
                  .then((fees) => {
@@ -163,6 +169,39 @@ function Searchpage({ sdata }) {
         }
 
     }, [type,allcolllist])
+    useEffect(() => {
+
+        if (type !== "") {
+            // console.log('aaa', type)
+            const newlist = coldata.filter((con) => {
+                return Object.values(con).join(" ").toLowerCase().includes(type.toLowerCase())
+            })
+           setsubdata(newlist)
+        }
+
+    }, [type,allcolllist])
+    useEffect(() => {
+
+        if (type !== "") {
+            // console.log('aaa', type)
+            const newlist = data2.filter((con) => {
+                return Object.values(con).join(" ").toLowerCase().includes(type.toLowerCase())
+            })
+           setsubdata2(newlist)
+        }
+
+    }, [type,allcolllist])
+    useEffect(() => {
+
+        if (type !== "") {
+            // console.log('aaa', type)
+            const newlist = data1.filter((con) => {
+                return Object.values(con).join(" ").toLowerCase().includes(type.toLowerCase())
+            })
+           setsubdata3(newlist)
+        }
+
+    }, [type,allcolllist])
     console.log('result2',resulta)
 
 
@@ -193,6 +232,42 @@ function Searchpage({ sdata }) {
                     </div> */}
 
                     <div className="row py-5">
+
+                    {accountid?null:
+                            subdata?.map((val) => {
+                                return <div className="col-md-3 col-12 my-2">
+                                    <div className="excard px-2">
+                                        <div className="excardimg">
+                                            {
+                                                val ?
+
+                                                    <img src={`https://ipfs.infura.io/ipfs/${val ? val[6] : null}`} className="img-fuild" alt="ll" />
+                                                    : null}
+
+                                        </div>
+                                        <div className="excarddetail">
+                                            <p>{val ? val[2] : null}</p>
+                                            <p>{val ? val[3] : null}</p>
+                                            {/* <p>10.52WAX</p> */}
+
+                                        </div>
+                                        <div className="excardbtn">
+
+                                            {/* <NavLink to={`/savenft/${val?val[0]:null}`} ><button className="one">Detail</button></NavLink> */}
+                                            <Link to={{
+                                                pathname: `/savenft/${val ? val[0] : null}`,
+                                                state: val ? val : null
+                                            }} style={{ fontSize: '15px' }}><button className="one">Details</button></Link>
+                                            {/* <button className="two">Buy</button> */}
+                                        </div>
+                                    </div>
+                                </div>
+                            })
+                        }
+
+
+
+
 
                         {
                             result?.map((val) => {
@@ -255,8 +330,70 @@ function Searchpage({ sdata }) {
                             </div>
                         }):null
                     }
+                    {accountid?null:
+                       subdata2? subdata2?.map((val) => {
+                            return <div className="col-md-3 col-12 my-2">
+                                <div className="excard px-2">
+                                    <div className="excardimg">
+                                        {
+                                            val?
+                                        
+                                        <img src={`https://ipfs.infura.io/ipfs/${val?val[6]:null}`} className="img-fuild" alt="ll" />
+                                        :null}
 
+                                    </div>
+                                    <div className="excarddetail">
+                                        <p>{val?val[2]:null}</p>
+                                        <p>{val?val[3]:null}</p>
+                                        {/* <p>10.52WAX</p> */}
 
+                                    </div>
+                                    <div className="excardbtn">
+                                        
+                                        <Link to={{
+                                                pathname:`/assetdetail/${val?val[0]:null}`,
+                                                state:val
+                                            }} style={{fontSize:'15px'}}><button className="one">Detail</button></Link>
+                                        {/* <button className="two">Buy</button> */}
+                                    </div>
+                                </div>
+                            </div>
+                        }):null
+                    }
+                    {accountid?null:
+                       subdata3? subdata3?.map((val) => {
+                            return <div className="col-md-3 col-12 my-2">
+                                <div className="excard px-2">
+                                    <div className="excardimg">
+                                        {
+                                            val?
+                                        
+                                        <img src={`https://ipfs.infura.io/ipfs/${val?val[6]:null}`} className="img-fuild" alt="ll" />
+                                        :null}
+
+                                    </div>
+                                    <div className="excarddetail">
+                                        <p>{val?val[2]:null}</p>
+                                        <p>{val?val[3]:null}</p>
+                                        {/* <p>10.52WAX</p> */}
+
+                                    </div>
+                                    <div className="excardbtn">
+                                        
+                                        <Link to={{
+                                                pathname:`/assetdetail/${val?val[0]:null}`,
+                                                state:val
+                                            }} style={{fontSize:'15px'}}><button className="one">Detail</button></Link>
+                                        {/* <button className="two">Buy</button> */}
+                                    </div>
+                                </div>
+                            </div>
+                        }):null
+                    }
+
+                     {
+                         result && resulta? null : <p>No Search data</p>
+                     }
                     </div>
                 </div>
 

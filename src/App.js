@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import Createcollection from './components/Createcollection'
 import Navbar from './components/Navbar'
 import Nftcreator from './components/Nftcreator'
-import { Switch, Route, useLocation, useHistory } from 'react-router-dom'
+import { Switch, Route, useHistory } from 'react-router-dom'
 import Home from './components/Home'
 import Midline from './components/Midline'
 import data from './components/Pdata';
@@ -16,46 +16,57 @@ import Explore from './components/Explore'
 import Carosel2 from './components/Carosel2'
 import Explore2 from './components/Explore2'
 import Web3 from 'web3'
-
-import Cone from './components/Cone'
 import Searchpage from './components/Searchpage'
 import Searchasset from './components/Searchasset'
+import CSDoge from './components/CSDoge'
+import CSdogecreate from './components/CSdogecreate'
 // import nft from '../abi/nft.json'
+import Caro from './components/Caro'
+import Allasset from './components/Allasset'
 
 
 function App() {
+  const [accountid, setaccountid] = useState()
+  // console.log('accountid', accountid)
 
-  // useEffect(() => {
-  //   async function getAccount() {
-  //     const accounts = await  window.ethereum.enable();
-  //     const account = accounts[0];
-  //     // do something with new account here
-  //     // alert('changed')
-  //     localStorage.clear()
-  //     window.location.reload()
+  useEffect(async() => {
+    const accounts1 = await window.ethereum.request({ method: 'eth_requestAccounts' });
+    setaccountid(accounts1)
+    if (window.ethereum) {
+      async function getAccount() {
+        const accounts = await window.ethereum.enable();
+        const account = accounts[0];
+        // do something with new account here
+        // alert('accont changed')
+        window.location.reload()
 
 
-  //   }
 
-  //   window.ethereum.on('accountsChanged', function (accounts) {
-  //     getAccount();
-  //   })
-  // }, [])
+
+
+
+      }
+
+      window.ethereum.on('accountsChanged', function (accounts) {
+        getAccount();
+      })
+    }
+  }, [])
   const collection = JSON.parse(localStorage.getItem('alliddatacol'))
   // console.log('aall', collection)
   // const asset = JSON.parse(localStorage.getItem('alliddatasset'))
   const [searchdata, setsearchdata] = useState()
   const history = useHistory()
   const searchclick = (data) => {
-    if (data!=="") {
+    if (data !== "") {
       setsearchdata(data)
       history.push(`/search/${data}`)
-      
+
 
 
     } else {
       history.push(`/`)
-      
+
 
     }
 
@@ -74,14 +85,21 @@ function App() {
           <Home />
           <Midline />
           {/* <Carologic/> */}
+          <Caro/>
           <Carosel sdata={searchdata} title={"Collections"} />
           <Carosel2 />
+          <Allasset/>
           {/* <Cone  title={"Collections"} /> */}
           <Chart />
         </Route>
         <Route exact path="/create">
           {/* <Navbar /> */}
-          <Nftcreator />
+          <Nftcreator type="create" />
+
+        </Route>
+        <Route exact path="/mycollection">
+          {/* <Navbar /> */}
+          <Nftcreator type="mycol" />
 
         </Route>
 
@@ -115,6 +133,13 @@ function App() {
         </Route>
         <Route path="/searcha">
           <Searchasset sdata={searchdata} />
+        </Route>
+        <Route path="/csdoge">
+          
+          <CSDoge/>
+        </Route>
+        <Route path="/csdogecreate">
+          <CSdogecreate/>
         </Route>
 
       </div>

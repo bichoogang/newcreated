@@ -1,14 +1,17 @@
 import React from 'react'
 import {data1,data2} from './Pdata'
 import { NavLink,Link } from 'react-router-dom';
-
-function Nftasssavecard({data, type,total,extradata,id,check}) { 
+import { Spinner } from 'react-bootstrap';
+import {addrs} from './address'
+function Nftasssavecard({data, type,total,extradata,id,check,spin}) { 
     console.log('lopo1',data)
     console.log('lopo2',total)
     console.log('loop3',check)
    
     return (
-        <>{
+        <>
+         
+        {
             check? check[8]==="t11"?
             data1?.map((val,index)=>{
                 return <>{val===null?null:   <div className="col-md-3 ">
@@ -21,6 +24,7 @@ function Nftasssavecard({data, type,total,extradata,id,check}) {
                         </div>
                         <div className="carddetails">
                             <p>{val?val[3]:null}</p>
+                            
                             <div className="card_btn">
                                 {
                                     type==="nftcard"?<NavLink to={`/savenft/2`} ><button className="detailbtn">View Collection</button></NavLink>:null
@@ -85,6 +89,15 @@ function Nftasssavecard({data, type,total,extradata,id,check}) {
 
             :null : null
         }
+        {spin?
+                        data.length?null:
+                        <div className="col-md-3 "
+                         style={{display:'flex',justifyContent:"center"}}>
+                            <Spinner animation="border" variant="light" />
+
+                        </div>:null
+                         
+                    }
         { 
                      data?
                      data.map((val,index)=>{

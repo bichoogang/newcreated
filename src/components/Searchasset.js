@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { coldata } from './Pdata'
 import { Link } from 'react-router-dom'
 import { AiOutlineSearch } from "react-icons/ai";
+import {addrs} from './address'
 function Searchasset({ sdata }) {
 const [active, setactive] = useState('sales')
 

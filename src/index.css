@@ -32,7 +32,7 @@
   display: flex;
   align-items: center;
   margin-top: 0px;
-  border: 3px solid #EC892C;
+  border: 3px solid #79e0d8;
   justify-content: space-between;
   border-radius: 999px;
   padding-left: 20px;
@@ -57,7 +57,7 @@
   color: wheat;
 }
 .nav1 .exploreinput .sicon{
-  background-color: #EC892C;
+  background-color: #79e0d8;
   width: 50px;
   height: 50px;
   display: flex;
@@ -366,6 +366,67 @@
   border-radius: 20px;
   padding: 5px 10px;
 }
+.carosel{
+  background-color: rgb(20,25,46);
+  padding: 30px 0;
+}
+.carosel h2{
+  font-size: 40px;
+  color: white;
+  font-weight: bold;
+  margin: 60px 0;
+}
+.carosel .detailbtn{
+  background-color: transparent;
+  color: white;
+  font-weight: bold;
+  font-size: 15px;
+  border: 2px solid rgb(234,146,62)!important;
+  border-radius: 20px;
+  padding: 5px 10px;
+}
+.carosel .excarddetail{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.carosel .excarddetail p{
+  margin: 0;
+  margin-bottom: 10px;
+  color: white;
+ 
+}
+.carosel .excarddetail p:nth-child(1){
+  border: 2px solid white;
+  width: fit-content;
+  padding: 2px 5px;
+  font-size: 13px;
+  text-align: center;
+  border-radius: 999px;
+}
+.carosel .excarddetail p:nth-child(2){
+  font-size: 16px;
+  font-weight: bold;
+}
+.carosel .excarddetail p:nth-child(3){
+  font-size: 14px;
+  font-weight: bold;
+  color: rgb(36, 121, 36);
+}
+.carosel .excarddetail p:nth-child(4){
+  word-break: break-all;
+
+}
+.carosel .buybtn{
+  background-color: rgb(234,146,62)!important;
+  color: white;
+  font-weight: bold;
+  font-size: 15px;
+  border: 2px solid rgb(234,146,62)!important;
+  border-radius: 20px;
+  padding: 5px 10px;
+}
 /* .swiper-wrapper{
   background-color: red;
 } */
@@ -488,7 +549,7 @@
   background-color: #523C32;
   border: none;
   outline: none;
-  color: #EC892C;
+  color: #79e0d8;
 }
 
 /* savenftdetail  */
@@ -840,7 +901,7 @@
 }
 .modal-content .modal-header .assetowner h5{
   font-size: 18px;
-  color: #EC892C;
+  color: #79e0d8;
 }
 .modal-content .savenftcard{
   padding: 0 30px;
@@ -889,10 +950,10 @@
 .modal-content .savenftcard .carddetails h4{
   font-size: 10px;
   margin: 0;
-  color: #EC892C;
+  color: #79e0d8;
 }
 .modal-content .modal-footer button{
-  background-color: #EC892C!important;
+  background-color: #79e0d8!important;
   width: 100%;
 }
 .modal-content .attricard .attributes{
@@ -909,7 +970,7 @@
 }
 .modal-content .attricard .attributes h3{
   font-size: 20px;
-  color: #EC892C;
+  color: #79e0d8;
 }
 .modal-content .attricard .attributes h4{
   font-size: 18px;
@@ -957,7 +1018,7 @@
 .assetdetails2 button,.assetdetails1 button{
   padding: 10px 20px;
   border: none;
-  background-color: #EC892C;
+  background-color: #79e0d8;
   outline: none;
   color: white;
   margin-top: 10px;
@@ -993,10 +1054,13 @@
   border-radius: 999px;
 
 }
+.exploremain{
+  min-height: 100vh;
+}
 .explore{
   background-color: rgb(20,25,46);
   padding: 10px 30px 30px 30px ;
-  min-height: 100vh;
+  /* min-height: 100vh; */
 }
 .explore .exinput{
   background-color: white;
@@ -1011,20 +1075,23 @@
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
   border-radius: 15px;
   height: fit-content;
-  max-height: 420px;
+ 
 }
 .explore .excardimg{
   display: flex;
   justify-content: center;
   background-color: rgb(20,25,46);
   padding: 10px 0;
+  height: 200px;
 }
 .explore .excardimg img{
+  
   max-width: 280px;
 }
 .explore .excarddetail{
   color: white;
   text-align: center;
+  height: 150px;
 }
 .explore .excardbtn{
   display: flex;
@@ -1040,16 +1107,21 @@
 }
 .explorecaro ::-webkit-scrollbar{
   width: 6px;
+  /* display: none; */
+}
+.explorecaro  ::-webkit-scrollbar-corner{
+  display: none;
 }
 .explorecaro ::-webkit-scrollbar-thumb{
-  background-color: white;
+  background-color: rgb(11, 16, 39);
   border-radius: 6px;
+  
 }
 .exploreinput{
   display: flex;
   align-items: center;
   margin-top: 0px;
-  border: 3px solid #EC892C;
+  border: 3px solid #79e0d8;
   justify-content: space-between;
   border-radius: 999px;
   padding-left: 20px;
@@ -1068,7 +1140,7 @@
   color: wheat;
 }
 .exploreinput .sicon{
-  background-color: #EC892C;
+  background-color: #79e0d8;
   width: 50px;
   height: 50px;
   display: flex;
@@ -1077,12 +1149,14 @@
   border-radius: 50%;
 }
 .explore .excard img{
-  width: auto;
-  height: 200px;
+  width: 100%;
+  height: auto;
+  max-height: 200px;
 }
 .explore .excard .excarddetail p{
   margin: 0;
   margin-bottom: 10px;
+ 
 }
 .explore .excard .excarddetail p:nth-child(1){
   border: 2px solid white;
@@ -1099,6 +1173,10 @@
   font-size: 14px;
   font-weight: bold;
   color: rgb(36, 121, 36);
+}
+.explore .excard .excarddetail p:nth-child(4){
+  word-break: break-all;
+
 }
 .explore .excard .excarddetail{
   display: flex;
@@ -1120,13 +1198,13 @@
 }
 .explore .excardbtn .one{
   background-color: transparent;
-  border: 2px solid #EC892C;
-  color: white;
+  border: 2px solid #7edbdf;
+  color: rgb(248, 248, 248);
 }
 .explore .excardbtn .two{
-  background-color: #EC892C;
-  /* border: 2px solid #EC892C; */
-  color: white;
+  background-color: #79e0d8;
+  /* border: 2px solid #79e0d8; */
+  color: rgb(17, 10, 10);
 }
 .filbtn{
   display: flex;
@@ -1145,7 +1223,7 @@
   outline: none;
 }
 .filbtn .exactive{
-  border-bottom: 4px solid #EC892C;
+  border-bottom: 4px solid #79e0d8;
   border-radius: 5px;
   outline: none;
 }

@@ -1,17 +1,30 @@
 import React, { useEffect, useState } from 'react'
-
+import { Spinner } from 'react-bootstrap';
 import { NavLink,Link } from 'react-router-dom';
-function Nftsavecard({ data, type,total, newdata }) { 
+import {addrs} from './address'
+function Nftsavecard({ data, type,total, newdata,spin }) { 
     
     
 
 
     return ( 
         <>
+         {spin?
+                        data.length?null:
+                        <div style={{display:'flex',justifyContent:"center"}}>
+                            <Spinner animation="border" variant="light" />
+
+                        </div>:null
+                         
+                    }
             {
                 data ?
                     data.map((val, index) => {
-                        return <div className="col-md-3 ">
+                        
+                        return <> 
+                        {
+                            val[0]==="1"?null:
+                         <div className="col-md-3 ">
                           {
                               val?
                           
@@ -43,6 +56,8 @@ function Nftsavecard({ data, type,total, newdata }) {
                             </div>:null
                             }
                         </div>
+                    }
+                        </>
                     })
 
 

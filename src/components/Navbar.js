@@ -28,15 +28,16 @@ function Navbar({searchsub}) {
             </div>
             <div className="menulist">
                 <ol>
-                    <li className="ak"><NavLink to="/">Explore</NavLink></li>
-                    <li className="ak"><NavLink to="/explore">Market</NavLink></li>
+                    {/* <li className="ak"><NavLink to="/">Explore</NavLink></li> */}
+                    <li className="ak"><NavLink to="/explore">Explore</NavLink></li>
                     {/* <li>Trading</li> */}
                     <li className="ak"><NavLink to="/create">NFT Creator</NavLink></li>
-                    <li className="ak"><NavLink to="/create">My Collections</NavLink></li>
+                    <li className="ak"><NavLink to="/mycollection">My Collections</NavLink></li>
+                    <li className="ak"><NavLink to="/csdoge">CSDoge</NavLink></li>
                     <li > <div className="exploreinput mx-5">
                     <input type="text" placeholder="Search Listing" onChange={(e)=>setsearch(e.target.value)}/>
-                    <div className="sicon">
-                        <AiOutlineSearch className="ak" onClick={()=>searchsub(search)} />
+                    <div className="sicon" onClick={()=>searchsub(search)} style={{cursor:'pointer'}}>
+                        <AiOutlineSearch className="ak" />
               
 
                     </div>

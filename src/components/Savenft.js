@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { BiImageAdd, BiChevronLeft } from "react-icons/bi";
-import { NavLink, useParams,useLocation } from 'react-router-dom';
+import { NavLink, useParams,useLocation ,useHistory} from 'react-router-dom';
 import Pdata from './Pdata'
 import { BsPlus } from "react-icons/bs";
 import Assetsadd from './Assetsadd';
@@ -9,6 +9,8 @@ import Adata from './Assetdata'
 import Nftsavecard from './Nftsavecard';
 import Web3 from 'web3'
 import nft from '../abi/nft.json'
+import {addrs} from './address'
+
 function Savenft() { 
     const { nftid } = useParams()
     // console.log('data', Pdata)
@@ -21,11 +23,12 @@ function Savenft() {
     // console.log('aaasave',userdataa)
     const [allasset,setallasset]=useState([])
     console.log('aasssalldata',allasset)
+    const [spin,setspin] = useState()
     
     const location = useLocation()
     // const mainid = 
     // const [value, setvalue] = useState()
-
+    const history = useHistory()
     const fdata = location.state
     // console.log('aasdda',fdata)
     const [idmain, setid] = useState(0)
@@ -38,6 +41,7 @@ function Savenft() {
         // localStorage.removeItem('totalnft')
         // setuserdata([])
         nftlist(nftid)
+        nftarray(nftid)
     },[]) 
 
     const nftinfo = async (id) => {
@@ -47,7 +51,7 @@ function Savenft() {
             //  console.log(accounts);
             let userwalletaddresss = accounts[0];
             window.web3 = new Web3(window.ethereum);
-            let swaping = new window.web3.eth.Contract(nft, '0xBDE025C87B0851c50290531aa0F9D4800bb1e18A')
+            let swaping = new window.web3.eth.Contract(nft, addrs)
 
             swaping.methods.nftinformation(id).call({ from: userwalletaddresss })
                 .then((fees) => {
@@ -68,7 +72,23 @@ function Savenft() {
             ...old,data
         ])
     }
-
+    const nftarray = async (collectionid) =>
+    {   
+        if (window.ethereum)
+        {
+        const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+        //  console.log(accounts);
+        let userwalletaddresss = accounts[0];
+        window.web3 = new Web3(window.ethereum);
+        let  swaping = new window.web3.eth.Contract(nft,addrs)
+        swaping.methods.collectionnft(collectionid).call({from:userwalletaddresss})
+        .then((fees)=>
+        {
+              console.log("fees",fees);    
+        }).catch() 
+        
+        }
+    } 
 
 
     const collectionnft = async (id, length) => {
@@ -79,7 +99,7 @@ function Savenft() {
             //  console.log(accounts);
             let userwalletaddresss = accounts[0];
             window.web3 = new Web3(window.ethereum);
-            let swaping = new window.web3.eth.Contract(nft, '0xBDE025C87B0851c50290531aa0F9D4800bb1e18A')
+            let swaping = new window.web3.eth.Contract(nft, addrs)
 
             swaping.methods.collectionstored(id, length).call({ from: userwalletaddresss })
                 .then((fees) => {
@@ -104,13 +124,14 @@ function Savenft() {
             //  console.log(accounts);
             let userwalletaddresss = accounts[0];
             window.web3 = new Web3(window.ethereum);
-            let swaping = new window.web3.eth.Contract(nft, '0xBDE025C87B0851c50290531aa0F9D4800bb1e18A')
+            let swaping = new window.web3.eth.Contract(nft, addrs)
 
             swaping.methods.totalnft(id).call({ from: userwalletaddresss })
                 .then((length) => {
                     localStorage.setItem(`totalnft${nftid}`, length)
                     for (let i = 0; i < length; i++) {
                         collectionnft(id, i);
+                        setspin(i)
                     }
                 })
                 .catch()
@@ -127,7 +148,7 @@ function Savenft() {
             <div className="container">
                 <div className="row">
                     <div className="col-md-7 col-12 headingl">
-                        <NavLink to="/create" ><BiChevronLeft /> Back</NavLink>
+                     <span style={{color:'white',fontSize:'28px'}}  onClick={()=>history.goBack()}><BiChevronLeft /> Back</span>   
                         <h2>Create New Asset </h2>
                         <h3>Create your collection first. Then you’ll create your schemas and assets.</h3>
 
@@ -181,10 +202,10 @@ function Savenft() {
                                         <p>Collection Description</p>
                                         <h3>{fdata[5]}</h3>
                                     </div>
-                                    <div className="marketfee">
+                                    {/* <div className="marketfee">
                                         <p>Market Fee</p>
                                         <h3>{fdata[7]}%</h3>
-                                    </div>
+                                    </div> */}
                                 </div>
 
 
@@ -196,7 +217,8 @@ function Savenft() {
                 </div>
             </div>
             {/* create assert  */}
-            <Assetsadd id={nftid} data={allasset} check={fdata} total={total} /> 
+            
+            <Assetsadd id={nftid} data={allasset} spin={spin} check={fdata} total={total} /> 
             {/* <Nftsavecard data={userdata} type="asset" /> */} 
 
 

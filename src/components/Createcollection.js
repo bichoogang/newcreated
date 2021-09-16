@@ -4,7 +4,11 @@ import { NavLink ,useHistory} from 'react-router-dom';
 import Web3 from 'web3'
 import nft  from  '../abi/nft.json'
 import {collectionlist} from './nftdata'
+import {Button,Modal,Spinner } from 'react-bootstrap'
+import {addrs} from './address'
+// import Modal from 'react-bootstrap/Modal'
 const IPFS = require('ipfs-api');
+
 const ipfs = new IPFS({ host: 'ipfs.infura.io', port: 5001, protocol: 'https' });
 
 
@@ -13,12 +17,17 @@ function Createcollection() {
     const [img, setimg] = useState();
     const [buffer, setbuffer] = useState();
     const history = useHistory()
+    const [show, setShow] = useState(false);
+    const handleClose = () => setShow(false);
+    const handleShow = () => setShow(true);
    
     const [displayimage, setdisplayimg] = useState();
     console.log("image", img);
     const [data, setdata] = useState({
-        collectionName: "", displayName: "", websiteUrl: "", collectionDescription: "", marketFee: ""
+        collectionName: "", displayName: "", websiteUrl: "", collectionDescription: "", marketFee: "0"
     })
+    const [tokenid, settokenid] = useState() 
+    const [pay,setpay] = useState()
     
     // useEffect(()=>{connectwallte},[]) 
 
@@ -29,10 +38,10 @@ function Createcollection() {
     
     const submit = async (e) => {
         e.preventDefault()
-        console.log("data", data.collectionName);
+        // console.log("data", data.collectionName);
         await ipfs.add(buffer,(error,result)=>{
-            console.log("ipfs result",result[0].hash);
-            console.log(result[0].hash);
+            // console.log("ipfs result",result[0].hash);
+            // console.log(result[0].hash);
             swaps(result[0].hash);
             if(error)
             {
@@ -55,7 +64,7 @@ function Createcollection() {
         reader.onloadend = () => {
           const buffer =  Buffer.from(reader.result);
           setbuffer(buffer);
-          console.log('buffer', buffer)
+        //   console.log('buffer', buffer)
         }
         }
         render.readAsDataURL(e.target.files[0])
@@ -67,20 +76,36 @@ function Createcollection() {
         if (window.ethereum)
         {
         const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-        //  console.log(accounts);
+         console.log(accounts);
+         settokenid(accounts)
+        setShow(true) 
+        setpay('')
         let userwalletaddresss = accounts[0];
+        console.log('acc',userwalletaddresss);
         window.web3 = new Web3(window.ethereum);
-        let  swaping = new window.web3.eth.Contract(nft,'0xBDE025C87B0851c50290531aa0F9D4800bb1e18A')
+        let  swaping = new window.web3.eth.Contract(nft,addrs)
         
         swaping.methods.createcollection(data.collectionName,data.displayName,data.websiteUrl,data.collectionDescription,e,parseInt(data.marketFee)).send({from:userwalletaddresss})
         .then((fees)=>
         {
               console.log(fees);
               if(fees.status===true){
-                  history.push('/create')
+                settokenid('')
+                setpay('suceess')
+                setShow(true)
               } 
+              else{
+                alert(' failed')
 
-        }).catch() 
+              }
+              
+
+        }).catch((err)=>{
+            settokenid('')
+            setShow(false)
+            setpay('')
+            console.log('erre')
+        }) 
         }
     }
     
@@ -152,8 +177,8 @@ function Createcollection() {
                                     <div className="col-md-6 col-12">
                                         <label>Collection Description</label>
                                         <textarea onChange={(e) => setdata({ ...data, collectionDescription: e.target.value })} required />
-                                        <label>Market Fee (0% - 15%)</label>
-                                        <input type="Number" onChange={(e) => setdata({ ...data, marketFee: e.target.value })} required />
+                                        {/* <label>Market Fee (0% - 15%)</label>
+                                        <input type="Number" onChange={(e) => setdata({ ...data, marketFee: e.target.value })} required /> */}
                                         <div className=" nftcbtn">
                                             <button type="submit">Mint NFT</button>
                                         </div>
@@ -161,6 +186,34 @@ function Createcollection() {
 
                                 </div>
                             </div>
+                            <Modal
+                                show={show}
+                                onHide={handleClose}
+                                backdrop="static"
+                                keyboard={false}
+                            >
+                                
+                                <Modal.Body>
+                                    <div className="row">
+                                        {
+                                            tokenid?<div style={{display:'flex'}}><h2 className="mx-5">Loading</h2> <Spinner animation="grow" variant="light" /></div>:null
+
+                                        }
+                                        {
+                                            pay?<h2>Collection Created Sucessfully</h2>:null
+                                        }
+                                        
+                                    </div>
+                                    
+                                </Modal.Body>
+                                <Modal.Footer>
+                                    
+                                    
+                                    {
+                                        pay?<Button variant="primary" onClick={()=>history.goBack('/')} >Ok</Button>:null
+                                    }
+                                </Modal.Footer>
+                            </Modal>
                         
                     </div>
                     

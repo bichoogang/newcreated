@@ -6,15 +6,18 @@ import Pdata from './Pdata'
 import Web3 from 'web3'
 import nft from '../abi/nft.json'
 import data from './Pdata';
-function Nftcreator() {
+import {addrs} from './address'
+function Nftcreator({type}) {
     const [userdata, setuserdata] = useState([])
     const [arratdata, setarraydata] = useState([])
     const [idmain, setid] = useState(0)
     const [listid, setlistid] = useState([])
     const [ newdata,setnewdata ] = useState()
     const [alldata, setalldata] = useState([])
+    const [spin,setspin] = useState()
+    const [alldatan, setalldatan] = useState([])
   
-    
+    // 0xA6bcD1A0725F16a0dc7eF500e1855E530a8BC110
     
     const userid = JSON.parse(localStorage.getItem('userid'))
     const getlist = userid?userid.length?userid[userid.length-1]:null:null
@@ -24,98 +27,155 @@ function Nftcreator() {
     
     useEffect(() => {
         // alert('useeffcet1')
+        collectionarray()
         
-        collectionlist()
+        // collectionlist()
 
     }, [])
 
   
-    const collectiondetails = async (id) => {
-        console.log('4')
+    // const collectiondetails = async (id) => {
+    //     console.log('4')
+    //     if (window.ethereum) {
+
+
+    //         const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+    //         //  console.log("id",id);
+    //         let userwalletaddresss = accounts[0];
+    //         window.web3 = new Web3(window.ethereum);
+    //         let swaping = new window.web3.eth.Contract(nft, addrs)
+
+    //         swaping.methods.collectiondetails(id).call({ from: userwalletaddresss })
+    //             .then((fees) => {
+    //                 // setuserdata(userdata+1)
+    //                 // localStorage.setItem(`${id}`, JSON.stringify(fees))
+    //                 console.log('asd',fees)
+    //                 setnewdata(fees)
+    //                 // alert('fun3')
+    //                 setlistid(id)
+    //                 savedata(fees)
+
+    //             }).catch()
+
+    //     }
+    // }
+    // const savedata = (data) =>{
+    //     setalldata((old)=>[
+    //         ...old,data
+    //     ])
+        
+    // }
+    const collectionarray = async () =>
+    {   
+        if (window.ethereum)
+        {
+        const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+        //  console.log(accounts);
+        let userwalletaddresss = accounts[0];
+        window.web3 = new Web3(window.ethereum);
+        let  swaping = new window.web3.eth.Contract(nft,addrs)
+        swaping.methods.totalcollectiondetails().call({from:userwalletaddresss})
+        .then((fees)=>
+        {
+            console.log("fees",fees);  
+            for (let i = 0; i < fees?.length; i++) {
+                console.log('lol',fees[i])
+                collectiondetailsnew(fees[i])
+                setspin(fees[i])
+
+            }  
+        })
+        .catch() 
+        
+        }
+    }
+    const collectiondetailsnew = async (id) => {
         if (window.ethereum) {
-
-
             const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-            //  console.log("id",id);
+            //  console.log(accounts);
             let userwalletaddresss = accounts[0];
             window.web3 = new Web3(window.ethereum);
-            let swaping = new window.web3.eth.Contract(nft, '0xBDE025C87B0851c50290531aa0F9D4800bb1e18A')
+            let swaping = new window.web3.eth.Contract(nft, addrs)
 
             swaping.methods.collectiondetails(id).call({ from: userwalletaddresss })
                 .then((fees) => {
-                    // setuserdata(userdata+1)
-                    localStorage.setItem(`${id}`, JSON.stringify(fees))
-                    setnewdata(fees)
-                    // alert('fun3')
-                    setlistid(id)
-                    savedata(fees)
+                    console.log("fff", fees);
+                    // setactive(id)
+                    getalllist(fees)
+
 
                 }).catch()
 
         }
     }
-    const savedata = (data) =>{
-        setalldata((old)=>[
-            ...old,data
+    const getalllist = (data) => {
+        setalldatan((old) => [
+            ...old, data
         ])
-        
+
+
     }
-   
+    console.log('alldata',alldatan)
 
-    const usercollection = async (id) => {
-        // console.log('idd', id)
-        console.log('3')
-        if (window.ethereum) {
-            const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-            //  console.log(accounts);
-            let userwalletaddresss = accounts[0];
-            window.web3 = new Web3(window.ethereum);
-            let swaping = new window.web3.eth.Contract(nft, '0xBDE025C87B0851c50290531aa0F9D4800bb1e18A')
+    // const usercollection = async (id) => {
+    //     // console.log('idd', id)
+    //     console.log('3')
+    //     if (window.ethereum) {
+    //         const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+    //         //  console.log(accounts);
+    //         let userwalletaddresss = accounts[0];
+    //         window.web3 = new Web3(window.ethereum);
+    //         let swaping = new window.web3.eth.Contract(nft, addrs)
 
-            swaping.methods.userinfo(userwalletaddresss, id).call({ from: userwalletaddresss })
-                .then((value) => {
-                    // setlistid(value)
-                    // setid([...setid,listid])
-                    // console.log('idval',value)
-                    localStorage.setItem(`${id}id`, value)
-                    // alert('fun2')
+    //         swaping.methods.userinfo(userwalletaddresss, id).call({ from: userwalletaddresss })
+    //             .then((value) => {
+    //                 // setlistid(value)
+    //                 // setid([...setid,listid])
+    //                 // console.log('idval',value)
+    //                 // localStorage.setItem(`${id}id`, value)
+    //                 // alert('fun2')
                     
-                    // nftlist(value);
-                    collectiondetails(value); 
-                })
-                .catch()
+    //                 // nftlist(value);
+                    
+    //                 collectiondetails(value); 
+    //             })
+    //             .catch((err)=>{
+    //                 console.log('error')
+    //             })
 
-        }
-    }
+    //     }
+    // }
 
 
 
 
-    const collectionlist = async () => {
-        console.log('2')
-        if (window.ethereum) {
-            const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-            //  console.log(accounts);
-            let userwalletaddresss = accounts[0];
-            window.web3 = new Web3(window.ethereum);
-            let swaping = new window.web3.eth.Contract(nft, '0xBDE025C87B0851c50290531aa0F9D4800bb1e18A')
+    // const collectionlist = async () => {
+    //     // console.log('2')
+    //     if (window.ethereum) {
+    //         const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+    //         //  console.log(accounts[0]);
+    //         let userwalletaddresss = accounts[0];
+    //         window.web3 = new Web3(window.ethereum);
+    //         let swaping = new window.web3.eth.Contract(nft, addrs)
+    //         // console.log('ss',swaping)
             
-            swaping.methods.totalcollection(userwalletaddresss).call({ from: userwalletaddresss })
-                .then((length) => {
-                    localStorage.setItem('total', length)
-                    for (let i = 0; i < length; i++) {
-                        // console.log('idd',i)
+    //         swaping.methods.totalcollection(userwalletaddresss).call({ from: userwalletaddresss })
+    //             .then((length) => {
+    //                console.log('total', length)
+    //                 for (let i = 0; i < length; i++) {
+    //                     console.log('idd',i)
 
-                        // console.log(list)
-                        // alert('fun1')
-                        usercollection(i);
-                    }
-                })
-                .catch()
+    //                     // console.log(list)
+    //                     // alert('fun1')
+    //                     setspin(i)
+    //                     usercollection(i);
+    //                 }
+    //             })
+    //             .catch()
 
-        }
-    }
-    const total = localStorage.getItem('total')
+    //     }
+    // }
+    // const total = localStorage.getItem('total')
 
    
     return ( 
@@ -123,17 +183,30 @@ function Nftcreator() {
             <div className="container">
                 <div className="row">
                     <div className="col-md-8 col-12 headingl">
-
-                        <h2>My Collections</h2>
+                        {
+                            type==="mycol"? <>
+                            <h2>My Collections</h2>
                         <h3>All NFTs live within collections. They’re like groups for NFTs that are of a similar theme.</h3>
+                            </>:
+                            <>
+                            <h2>Create Collections</h2>
+                        {/* <h3>All NFTs live within collections. They’re like groups for NFTs that are of a similar theme.</h3> */}
+                            </>
+                        }
+
+                        
 
                     </div>
                     <div className="col-md-4 col-12 headingr">
+                        
 
                     </div>
 
                 </div>
-                <div className="row">
+                <div className="row mt-3">
+                    {
+                        type==="mycol"?null:
+                    
                     <div className="col-12 col-md-3">
                         <div className="nftcard">
                             <NavLink to="/createcollection">
@@ -148,7 +221,11 @@ function Nftcreator() {
 
                         </div>
                     </div> 
-                    <Nftsavecard data={alldata} type="nftcard" total={total}  />
+}
+                    {
+                        type==="create"?null:<Nftsavecard data={alldatan} spin={spin} type="nftcard"  />
+                    }
+                    
 
                 </div>
             </div>

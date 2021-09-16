@@ -1,12 +1,12 @@
 import img1 from '../img/img2.webp'
 import img2 from '../img/img3.webp'
-
+import {addrs} from './address'
 export const data1 = [{
     0: "2",
     1: "col 1 d",
     2: "lvhrg.wam",
     3: "col one asset 1",
-    4: "1",
+    4: "20",
     5: "12500",
     6: "QmcFxHe19Urcr5YnddVHmghRwkHpWbG277MWmpMjcLaU11",
     7: "2",
@@ -17,7 +17,7 @@ export const data1 = [{
     1: "12004",
     2: "1629395979",
     3: "col-one -asset -2",
-    4: "1",
+    4: "15",
     5: "45211",
     6: "QmawQccqBgdCy9doiLgunWb49beDMBtQb4uTf5AhEi2ePc",
     7: "2",

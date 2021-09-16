@@ -1,5 +1,6 @@
 import Web3 from 'web3'
 import nft  from  '../abi/nft.json'
+import {addrs} from './address'
 
 const collectiondetails = async (id) =>
 {   
@@ -9,7 +10,7 @@ const collectiondetails = async (id) =>
         //  console.log(accounts);
         let userwalletaddresss = accounts[0];
         window.web3 = new Web3(window.ethereum);
-        let  swaping = new window.web3.eth.Contract(nft,'0xBDE025C87B0851c50290531aa0F9D4800bb1e18A')
+        let  swaping = new window.web3.eth.Contract(nft,addrs)
         
         swaping.methods.collectiondetails(id).call({from:userwalletaddresss})
         .then((fees)=>
@@ -28,7 +29,7 @@ const nftinfo = async (id) =>
         //  console.log(accounts);
         let userwalletaddresss = accounts[0];
         window.web3 = new Web3(window.ethereum);
-        let  swaping = new window.web3.eth.Contract(nft,'0xBDE025C87B0851c50290531aa0F9D4800bb1e18A')
+        let  swaping = new window.web3.eth.Contract(nft,addrs)
         
         swaping.methods.nftinformation(id).call({from:userwalletaddresss})
         .then((fees)=>
@@ -47,7 +48,7 @@ const usercollection = async (id) =>
         //  console.log(accounts);
         let userwalletaddresss = accounts[0];
         window.web3 = new Web3(window.ethereum);
-        let  swaping = new window.web3.eth.Contract(nft,'0xBDE025C87B0851c50290531aa0F9D4800bb1e18A')
+        let  swaping = new window.web3.eth.Contract(nft,addrs)
         
         swaping.methods.userinfo(userwalletaddresss,id).call({from:userwalletaddresss})
         .then((value)=>
@@ -69,7 +70,7 @@ const collectionnft = async (id,length) =>
         //  console.log(accounts);
         let userwalletaddresss = accounts[0];
         window.web3 = new Web3(window.ethereum);
-        let  swaping = new window.web3.eth.Contract(nft,'0xBDE025C87B0851c50290531aa0F9D4800bb1e18A')
+        let  swaping = new window.web3.eth.Contract(nft,addrs)
         
         swaping.methods.collectionstored(id,length).call({from:userwalletaddresss})
         .then((fees)=>
@@ -90,7 +91,7 @@ export const collectionlist = async () =>
         //  console.log(accounts);
         let userwalletaddresss = accounts[0];
         window.web3 = new Web3(window.ethereum);
-        let  swaping = new window.web3.eth.Contract(nft,'0xBDE025C87B0851c50290531aa0F9D4800bb1e18A')
+        let  swaping = new window.web3.eth.Contract(nft,addrs)
         
         swaping.methods.totalcollection(userwalletaddresss).call({from:userwalletaddresss})
         .then((length)=>
@@ -113,7 +114,7 @@ const nftlist = async (id) =>
         //  console.log(accounts);
         let userwalletaddresss = accounts[0];
         window.web3 = new Web3(window.ethereum);
-        let  swaping = new window.web3.eth.Contract(nft,'0xBDE025C87B0851c50290531aa0F9D4800bb1e18A')
+        let  swaping = new window.web3.eth.Contract(nft,addrs)
         
         swaping.methods.totalnft(id).call({from:userwalletaddresss})
         .then((length)=>

@@ -7,11 +7,12 @@ import { MdCancel } from "react-icons/md";
 import Web3 from 'web3'
 import nft from '../abi/nft.json'
 import fromExponential from 'from-exponential'
-import {addrs} from './address'
+import { addrs } from './address'
+
 const IPFS = require('ipfs-api');
 const ipfs = new IPFS({ host: 'ipfs.infura.io', port: 5001, protocol: 'https' });
 
-function Assetcreator() {
+function CSdogecreate() {
     const { nftid } = useParams()
     const [img, setimg] = useState()
     console.log('assetimg', img)
@@ -20,7 +21,7 @@ function Assetcreator() {
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
-    // const [copies, setcopies] = useState()
+    const [copies, setcopies] = useState()
     const [ownername, setownername] = useState()
     const [assetname, setassetname] = useState()
     const [assetimg, setassetimg] = useState()
@@ -30,43 +31,30 @@ function Assetcreator() {
     const [pay, setpay] = useState()
     const [price, setprice] = useState()
     const [aid, setaid] = useState()
-    console.log('nfttidnew', price)
+    const [checkval, setcheckval] = useState(true)
+    
+    console.log('nfttidnew', checkval)
 
 
     const submit = async (e) => {
         e.preventDefault()
         // setShow(true)
         // nftidn()
-        if(price){
-            
-            await ipfs.add(buffer, (error, result) => {
-                console.log("ipfs result", result[0].hash);
-                console.log(result[0].hash);
-                swaps(result[0].hash);
-                if (error) {
-                    console.error(error)
-                    return;
-                }
-            })
-        }else{
-            await ipfs.add(buffer, (error, result) => {
-                console.log("ipfs result", result[0].hash);
-                console.log(result[0].hash);
-                swapsnull(result[0].hash);
-                if (error) {
-                    console.error(error)
-                    return;
-                }
-            })
-            
-        }
 
 
-       
+        await ipfs.add(buffer, (error, result) => {
+            console.log("ipfs result", result[0].hash);
+            console.log(result[0].hash);
+            mintcsdoge(result[0].hash);
+            if (error) {
+                console.error(error)
+                return;
+            }
+        })
 
     }
 
-    // 0xA6bcD1A0725F16a0dc7eF500e1855E530a8BC110 
+    // 0xd2a5f3B981FBB971AAd36DDAb55CDDf32D5CfbF4 
 
 
     const choosepic = (e) => {
@@ -107,7 +95,40 @@ function Assetcreator() {
         }
     }
 
-    const swaps = async (e) => {
+    // const swaps = async (e) => {
+    //     if (window.ethereum) {
+    //         const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+    //         //  console.log(accounts);
+    //         settokenid(accounts)
+    //         setShow(true)
+    //         setpay('')
+    //         let userwalletaddresss = accounts[0];
+    //         window.web3 = new Web3(window.ethereum);
+    //         let swaping = new window.web3.eth.Contract(nft, addrs)
+    //         let collectionid = nftid;
+    //         swaping.methods.create(collectionid, userwalletaddresss, e, assetname, ownername, copies, assetdescrip).send({ from: userwalletaddresss })
+    //             .then((fees) => {
+    //                 console.log(fees);
+    //                 if (fees.status === true) {
+    //                     //   history.goBack('/create') 
+    //                     console.log('done')
+    //                     nftidn()
+
+
+    //                 } else {
+    //                     alert('failed')
+    //                 }
+    //             }).catch((err) => {
+
+    //                 settokenid('')
+    //                 setShow(false)
+    //                 setpay('')
+    //                 console.log('erre')
+    //             })
+
+    //     }
+    // }
+    const mintcsdoge = async (e) => {
         if (window.ethereum) {
             const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
             //  console.log(accounts);
@@ -117,17 +138,13 @@ function Assetcreator() {
             let userwalletaddresss = accounts[0];
             window.web3 = new Web3(window.ethereum);
             let swaping = new window.web3.eth.Contract(nft, addrs)
-            let collectionid = nftid;
-            let copies = 1;
-            swaping.methods.create(collectionid, userwalletaddresss, e, assetname, ownername, copies, assetdescrip,false).send({ from: userwalletaddresss })
+            let collectionid = 1;
+            swaping.methods.createcsdoge(collectionid, userwalletaddresss, e, assetname, ownername, assetdescrip, copies).send({ from: userwalletaddresss })
                 .then((fees) => {
                     console.log(fees);
                     if (fees.status === true) {
                         //   history.goBack('/create') 
-                        console.log('done')
-                        nftidn() 
-
-
+                        nftidn()
                     } else {
                         alert('failed')
                     }
@@ -139,46 +156,27 @@ function Assetcreator() {
                     console.log('erre')
                 })
 
+
         }
     }
-    const swapsnull = async (e) => {
+    const nftidnew = async () => {
         if (window.ethereum) {
             const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
             //  console.log(accounts);
-            settokenid(accounts)
-            setShow(true)
-            setpay('')
             let userwalletaddresss = accounts[0];
             window.web3 = new Web3(window.ethereum);
             let swaping = new window.web3.eth.Contract(nft, addrs)
-            let collectionid = nftid;
-            let copies = 1;
-            swaping.methods.create(collectionid, userwalletaddresss, e, assetname, ownername, copies, assetdescrip,false).send({ from: userwalletaddresss })
-                .then((fees) => {
-                    console.log(fees);
-                    if (fees.status === true) {
-                        //   history.goBack('/create') 
-                        console.log('done')
-                        settokenid('')
-                        setpay('suceess')
-                        setShow(true)
 
-
-                    } else {
-                        alert('failed')
-                    }
-                }).catch((err) => {
-
-                    settokenid('')
-                    setShow(false)
-                    setpay('')
-                    console.log('erre')
+            swaping.methods.csdogenft().call({ from: userwalletaddresss })
+                .then((id) => {
+                    console.log(id);
                 })
-
+                .catch()
         }
     }
-    
+
     // console.log("mmm", fdata)
+    
     const fixedsale = async (tokenid) => {
         console.log('akhj', price)
         console.log('tokenakhj', tokenid)
@@ -194,7 +192,7 @@ function Assetcreator() {
             let amount = window.web3.utils.toBN(fromExponential(((parseFloat(price)) * Math.pow(10, 18))));
             console.log('mainamout', amount)
 
-            swaping.methods.fixedsales(tokenid, amount,false).send({ from: userwalletaddresss })
+            swaping.methods.fixedsales(tokenid, amount, checkval).send({ from: userwalletaddresss })
                 .then((length) => {
                     console.log(length);
                     if (length.status === true) {
@@ -226,8 +224,8 @@ function Assetcreator() {
 
                     <div className="col-md-7 col-12 headingl">
                         <p onClick={() => history.goBack()} style={{ color: 'white', cursor: 'pointer', fontSize: '25px' }} ><BiChevronLeft /> Back</p>
-                        <h2>Mint Assest</h2>
-                        <h3>Create your collection first. Then you’ll create your schemas and assets.</h3>
+                        <h2>Create CSDoge</h2>
+
 
                     </div>
                     <div className="col-md-7 col-12 headingr">
@@ -235,10 +233,11 @@ function Assetcreator() {
                     </div>
 
                 </div>
+                {/* <button onClick={nftidnew}>click</button> */}
                 <form onSubmit={submit}>
                     <div className="row">
 
-                        <div className="col-md-3 col-12 mb-5">
+                        <div className="col-md-3 col-12 mb-0">
                             <div className="nftcard">
 
                                 <label for="actual-btn">
@@ -271,16 +270,16 @@ function Assetcreator() {
                             <div className="nftcreatecard">
                                 <div className="row">
                                     <div className="col-md-6 col-12">
-                                        <label>Asset Owner <br />(12 Character, 1-5 & a-z)</label>
+                                        <label>CSDoge Owner <br />(12 Character, 1-5 & a-z)</label>
                                         <input type="text" placeholder="Account name" onChange={(e) => setownername(e.target.value)} required />
                                         {/* <label>Display Name</label>
                                         <input type="text"  required /> */}
                                     </div>
                                     <div className="col-md-6 col-12">
-                                        {/* <label>Number or Copies</label>
-                                        <input type="Number" id="quantity" name="quantity" min="1.0" onChange={(e) => setcopies(e.target.value)} required /> */}
+                                        <label>Number or Copies</label>
+                                        <input type="Number" id="quantity" name="quantity" min="1.0" onChange={(e) => setcopies(e.target.value)} required />
                                         <div className=" nftcbtn">
-                                            <button type="submit" >Create Assest</button>
+                                            <button type="submit" >Create CSDoge</button>
                                         </div>
                                     </div>
 
@@ -318,13 +317,23 @@ function Assetcreator() {
                                 </div>
                             </div>
                         </div>
+
                         <div className="col-12 assetone">
                             <div className="row">
                                 <div className="left col-md-4 col-12">
                                     <h3>Price</h3>
                                 </div>
                                 <div className="right col-md-8 col-12">
-                                    <input type="number" placeholder="Price" min="0" step="any" onChange={(e) => setprice(e.target.value)} />
+                                    <input type="number" placeholder="Price" step="any" onChange={(e) => setprice(e.target.value)} required />
+                                    <div style={{ padding: "0 20px" }}>
+
+                                        <label style={{ color: 'white' }} for="html">BNB</label>
+                                        <input type="radio" id="bnb" name="fav_language" checked={checkval === false} onClick={() => setcheckval(false)} />
+                                        <label for="ETH" style={{ color: 'white' }}>CSDOGE</label>
+                                        <input type="radio" id="ETH" name="fav_language" checked={checkval === true} onClick={() => setcheckval(true)} />
+
+                                    </div>
+
                                 </div>
                             </div>
                         </div>
@@ -373,4 +382,4 @@ function Assetcreator() {
     )
 }
 
-export default Assetcreator
+export default CSdogecreate
